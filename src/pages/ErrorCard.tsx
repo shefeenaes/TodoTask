@@ -9,7 +9,6 @@ const ErrorCard: React.FC<ErrorCardProps> = ({ message, handleClose }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 p-6 ">
       <div className="relative flex items-center justify-between gap-4  max-w-sm md:max-w-md lg:max-w-lg p-5 bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Left red decorative SVG */}
         <svg
           className="absolute left-[-60px] top-0 w-[150px] h-full rotate-90 fill-[#ff9090dc] "
           viewBox="0 0 1440 320"
@@ -21,7 +20,6 @@ const ErrorCard: React.FC<ErrorCardProps> = ({ message, handleClose }) => {
           />
         </svg>
 
-        {/* Message Content */}
         <div className="flex flex-col justify-center  flex-grow">
           <p className="text-red-600 text-xl font-bold text-center">Error</p>
           <p className="text-gray-600 text-sm md:text-base">{message}</p>

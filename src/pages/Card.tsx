@@ -33,17 +33,14 @@ const Card: React.FC<CardProps> = ({
       onClick={onSelect}
     >
       <div className="flex flex-col flex-1 gap-3 w-full">
-        {/* Title - Single Line with Ellipsis */}
         <h2 className="text-white text-base sm:text-lg font-semibold line-clamp-1 overflow-hidden text-ellipsis whitespace-nowrap">
           {title}
         </h2>
 
-        {/* Description - 2 Lines on Mobile, 4 on Tablet/Desktop */}
         <p className="text-white text-sm sm:text-base overflow-hidden text-ellipsis line-clamp-2 sm:line-clamp-4">
           {description}
         </p>
 
-        {/* Buttons - Centered on Mobile, Right-aligned on Desktop */}
         <div className="mt-4 flex flex-row gap-3 justify-center sm:justify-end w-full">
           <span
             onClick={(e) => {

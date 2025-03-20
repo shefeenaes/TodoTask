@@ -13,12 +13,10 @@ const ItemList: React.FC<ItemListProps> = ({ items, onDelete, onEdit }) => {
 
   return (
     <div className="p-4 sm:p-6 bg-gray-900 rounded-xl shadow-lg w-full max-w-4xl mx-auto">
-      {/* Responsive Title */}
-      <h2 className="text-center text-xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-4 sm:mb-6">
+      <h2 className="text-center text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-purple-800 mb-6">
         Task List
       </h2>
 
-      {/* Responsive Cards Grid */}
       <div className="flex flex-col gap-3 sm:gap-4 w-full">
         {items.map((item) => (
           <Card
@@ -29,7 +27,7 @@ const ItemList: React.FC<ItemListProps> = ({ items, onDelete, onEdit }) => {
             onSelect={() => setSelectedId(item.id)}
             onEdit={() => onEdit(item)}
             onDelete={() => onDelete(item.id)}
-            fullWidth={true} // Ensuring it takes full width inside the parent
+            fullWidth={true}
           />
         ))}
       </div>

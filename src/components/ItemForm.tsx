@@ -36,25 +36,23 @@ const ItemForm: React.FC<Props> = ({
     } else {
       onAdd(title, body);
     }
-    handleClear(); // Clear form after submit
+    handleClear();
   };
 
   const handleClear = () => {
     setTitle("");
     setBody("");
-    if (setEditingItem) setEditingItem(null); // Clear editing item
+    if (setEditingItem) setEditingItem(null);
   };
 
   return (
-    <div className="relative w-full p-4 md:p-6 lg:p-8 rounded-xl bg-transparent">
-      {/* Heading */}
-      <h2 className="text-center text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6">
-        Task Form
-      </h2>
+    <div className="relative p-1 m-4 text-white rounded-xl before:absolute before:inset-0 before:-z-10 before:rounded-xl before:bg-gradient-to-r before:from-blue-500 before:to-purple-600 ">
+      <div className="relative p-6 bg-gray-900 rounded-xl">
+        <h2 className="text-center text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-purple-800 mb-6">
+          Task Form
+        </h2>
 
-      <div className="relative rounded-xl p-6 text-white border border-gray-700">
         <form className="flex flex-col gap-5 w-full" onSubmit={handleSubmit}>
-          {/* Title Input */}
           <div className="flex flex-col gap-2 w-full">
             <input
               id="title"
@@ -68,7 +66,6 @@ const ItemForm: React.FC<Props> = ({
             />
           </div>
 
-          {/* Description Textarea */}
           <div className="flex flex-col gap-2 w-full">
             <textarea
               id="Description"
@@ -82,7 +79,6 @@ const ItemForm: React.FC<Props> = ({
             />
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-4 justify-center mt-4">
             {editingId ? (
               <>

@@ -16,7 +16,7 @@ const DeleteButton = () => {
           <line x1={10} y1={11} x2={10} y2={17} />
           <line x1={14} y1={11} x2={14} y2={17} />
         </svg>
-        {/* Tooltip */}
+
         <span className="absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-20 bg-black/70 text-white text-center text-xs rounded px-2 py-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           Remove
         </span>

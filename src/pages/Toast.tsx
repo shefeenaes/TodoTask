@@ -1,7 +1,5 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 
-// Forward ref for the Toast component
-
 const Toast = forwardRef((_, ref) => {
   const [toast, setToast] = useState({
     visible: false,
@@ -10,7 +8,6 @@ const Toast = forwardRef((_, ref) => {
     header: "",
   });
 
-  // Exposing showToast function to the parent component via ref
   useImperativeHandle(ref, () => ({
     showToast(type: "success" | "error", message: string, header: string) {
       setToast({
@@ -20,7 +17,6 @@ const Toast = forwardRef((_, ref) => {
         visible: true,
       });
 
-      // Hide the toast after 3 seconds
       setTimeout(() => {
         setToast((prevToast) => ({
           ...prevToast,
@@ -30,7 +26,6 @@ const Toast = forwardRef((_, ref) => {
     },
   }));
 
-  // If the toast is not visible, return null to avoid rendering
   if (!toast.visible) return null;
 
   return (

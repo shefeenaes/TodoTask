@@ -19,7 +19,7 @@ const Home = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [addFlag, setAddFlag] = useState<boolean>(true); // Initially set to true
+  const [addFlag, setAddFlag] = useState<boolean>(true);
   const toastRef = useRef<{
     showToast: (
       type: "success" | "error",
@@ -128,8 +128,6 @@ const Home = () => {
 
   const handleEditClick = (item: Item) => {
     setEditingItem(item);
-
-    // Scroll to the form
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
@@ -137,7 +135,6 @@ const Home = () => {
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Background Waves */}
       <div className="absolute left-0 w-full h-full wave-bg">
         <span className="wave-span wave-1"></span>
         <span className="wave-span wave-2"></span>
@@ -154,7 +151,6 @@ const Home = () => {
 
             <NavigationBar />
 
-            {/* Task Form */}
             <div ref={formRef}>
               <ItemForm
                 onAdd={handleAdd}
@@ -166,11 +162,10 @@ const Home = () => {
               />
             </div>
 
-            {/* Center the Sort button */}
             <div className="flex justify-center mb-4">
               <button
                 onClick={toggleSortOrder}
-                className="bg-gray-500 text-white px-6 py-3 rounded-lg"
+                className="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md "
               >
                 Sort by Title (
                 {sortOrder === "asc" ? "Ascending" : "Descending"})
@@ -180,7 +175,7 @@ const Home = () => {
             <ItemList
               items={sortedItems}
               onDelete={handleDelete}
-              onEdit={handleEditClick} // Updated to use handleEditClick
+              onEdit={handleEditClick}
             />
           </>
         )}
