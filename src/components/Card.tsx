@@ -1,6 +1,6 @@
 import React from "react";
-import DeleteButton from "./DeleteButton";
-import EditButton from "./EditButton";
+import DeleteButton from "./buttons/DeleteButton";
+import EditButton from "./buttons/EditButton";
 
 interface CardProps {
   title: string;
