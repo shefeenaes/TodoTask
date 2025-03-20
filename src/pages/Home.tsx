@@ -1,3 +1,4 @@
+// Home Component
 import { useEffect, useState } from "react";
 import ItemForm from "../components/ItemForm";
 import ItemList from "../components/ItemList";
@@ -10,6 +11,7 @@ import {
 import { Item } from "../types/itemTypes";
 import Loader from "./Loader";
 import ErrorCard from "./ErrorCard";
+import NavigationBar from "./NavBar";
 
 const Home = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -17,7 +19,6 @@ const Home = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [hasCreatedPost, setHasCreatedPost] = useState<boolean>(false);
 
   const sortedItems = [...items].sort((a, b) => {
     if (sortOrder === "asc") return a.title.localeCompare(b.title);
@@ -47,16 +48,8 @@ const Home = () => {
   }, []);
 
   const handleAdd = (title: string, body: string) => {
-    if (hasCreatedPost) {
-      setErrorMessage(
-        "You can only create one post! It's like having one slice of cake, no more for now."
-      );
-
-      return;
-    }
     createPost(title, body).then((newItem: Item) => {
       setItems([...items, newItem]);
-      setHasCreatedPost(true);
       setErrorMessage("");
     });
   };
@@ -66,7 +59,6 @@ const Home = () => {
       setErrorMessage(
         "You can't edit a brand new item! It's still in its baby stage. Please try to edit other items."
       );
-
       return;
     }
     updatePost(id, title, body).then((updatedItem: Item) => {
@@ -79,12 +71,14 @@ const Home = () => {
   const handleDelete = (id: number) => {
     deletePost(id).then(() => setItems(items.filter((item) => item.id !== id)));
   };
+
   const handleClose = () => {
     setErrorMessage("");
   };
+
   return (
-    <div className="relative">
-      <div className="container mx-auto p-4 transition-opacity relative z-50">
+    <div className="relative pt-24">
+      <div className="container mx-auto px-4 py-8 transition-opacity relative z-50">
         {loading ? (
           <Loader />
         ) : (
@@ -92,13 +86,7 @@ const Home = () => {
             {errorMessage && (
               <ErrorCard message={errorMessage} handleClose={handleClose} />
             )}
-            <h1 className="text-xl font-bold mb-4">Item List</h1>
-            <button
-              onClick={toggleSortOrder}
-              className="bg-gray-500 text-white px-4 py-2 mb-4"
-            >
-              Sort by Title ({sortOrder === "asc" ? "Ascending" : "Descending"})
-            </button>
+            <NavigationBar />
 
             <ItemForm
               onAdd={handleAdd}
@@ -106,7 +94,14 @@ const Home = () => {
               initialTitle={editingItem?.title || ""}
               initialBody={editingItem?.body || ""}
               editingId={editingItem?.id}
+              setEditingItem={setEditingItem}
             />
+            <button
+              onClick={toggleSortOrder}
+              className="bg-gray-500 text-white px-4 py-2 mb-4"
+            >
+              Sort by Title ({sortOrder === "asc" ? "Ascending" : "Descending"})
+            </button>
             <ItemList
               items={sortedItems}
               onDelete={handleDelete}
