@@ -23,24 +23,34 @@ const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <label
-      className={`flex items-center gap-3 p-5 rounded-lg transition-all cursor-pointer ${
-        fullWidth ? "w-full" : "w-auto"
-      } ${
-        isSelected
-          ? "bg-gray-700 ring-4 ring-blue-500"
-          : "bg-gray-800 hover:bg-gray-700"
-      }`}
+      className={`flex flex-col sm:flex-row items-center gap-3 p-4 sm:p-5 rounded-lg shadow-lg transition-all cursor-pointer 
+        ${fullWidth ? "w-full" : "max-w-full"} 
+        ${
+          isSelected
+            ? "bg-gray-700 ring-4 ring-blue-500"
+            : "bg-gray-800 hover:bg-gray-700"
+        }`}
       onClick={onSelect}
     >
-      <div className="flex flex-col flex-1 gap-4">
-        <h2 className="text-white text-xl font-semibold">{title}</h2>
-        <p className="text-white text-sm">{description}</p>
-        <div className="mt-4 flex gap-3 justify-end">
+      <div className="flex flex-col flex-1 gap-3 w-full">
+        {/* Title - Single Line with Ellipsis */}
+        <h2 className="text-white text-base sm:text-lg font-semibold line-clamp-1 overflow-hidden text-ellipsis whitespace-nowrap">
+          {title}
+        </h2>
+
+        {/* Description - 2 Lines on Mobile, 4 on Tablet/Desktop */}
+        <p className="text-white text-sm sm:text-base overflow-hidden text-ellipsis line-clamp-2 sm:line-clamp-4">
+          {description}
+        </p>
+
+        {/* Buttons - Centered on Mobile, Right-aligned on Desktop */}
+        <div className="mt-4 flex flex-row gap-3 justify-center sm:justify-end w-full">
           <span
             onClick={(e) => {
               e.stopPropagation();
               onEdit();
             }}
+            className="hover:scale-105 transition-transform"
           >
             <EditButton />
           </span>
@@ -49,6 +59,7 @@ const Card: React.FC<CardProps> = ({
               e.stopPropagation();
               onDelete();
             }}
+            className="hover:scale-105 transition-transform"
           >
             <DeleteButton />
           </span>

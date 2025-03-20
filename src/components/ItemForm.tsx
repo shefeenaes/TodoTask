@@ -53,7 +53,7 @@ const ItemForm: React.FC<Props> = ({
       </h2>
 
       <div className="relative rounded-xl p-6 text-white border border-gray-700">
-        <form className="flex flex-col gap-5 w-full">
+        <form className="flex flex-col gap-5 w-full" onSubmit={handleSubmit}>
           {/* Title Input */}
           <div className="flex flex-col gap-2 w-full">
             <input
@@ -104,14 +104,13 @@ const ItemForm: React.FC<Props> = ({
             ) : (
               <>
                 <button
-                  type="button"
-                  onClick={handleSubmit}
+                  type="submit"
                   className="text-white bg-blue-500 hover:bg-blue-400 py-2 px-6 rounded"
                 >
                   Add Task
                 </button>
                 <button
-                  type="button"
+                  type="reset"
                   onClick={handleClear}
                   className="text-white bg-gray-500 hover:bg-gray-400 py-2 px-6 rounded"
                 >

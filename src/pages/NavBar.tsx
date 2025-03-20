@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+
 const NavigationBar = () => {
   const taglines = useMemo(() => ["Organize.", "Prioritize.", "Conquer."], []);
 
@@ -34,23 +35,28 @@ const NavigationBar = () => {
   }, [charIndex, isDeleting, wordIndex, currentText, taglines]);
 
   return (
-    <nav className="bg-transparent text-center justify-center  w-full fixed top-0 left-0 z-50 mb-4">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo and Title */}
-        <div className="flex items-center gap-4">
-          <img src="/assets/todoLogo.svg" alt="Logo" className="w-24 h-24 " />
-          <h1 className="text-2xl font-bold text-gray-800">
-            <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text text-4xl">
-              TaskTrack
+    <nav className="bg-transparent flex justify-center items-center  w-full text-center inset-0 z-50">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        {/* Logo */}
+        <img
+          src="/assets/todoLogo.svg"
+          alt="Logo"
+          className="w-16 sm:w-20 h-16 sm:h-20"
+        />
+
+        {/* Title + Tagline */}
+        <h1 className="text-2xl sm:text-4xl font-bold text-gray-800 flex flex-col text-center sm:text-left">
+          <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text">
+            TaskTrack
+          </span>
+          {/* Tagline below TaskTrack */}
+          <span className="text-gray-600 text-lg italic tracking-wide min-h-[24px]">
+            {currentText}
+            <span className="inline-block w-1 bg-gray-600 animate-blink">
+              &nbsp;
             </span>
-            <span className="ml-2 text-gray-600 text-lg italic tracking-wide">
-              {currentText}
-              <span className="inline-block w-1 bg-gray-600 animate-blink">
-                &nbsp;
-              </span>
-            </span>
-          </h1>
-        </div>
+          </span>
+        </h1>
       </div>
     </nav>
   );
