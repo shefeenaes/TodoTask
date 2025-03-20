@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ItemForm from "../components/ItemForm";
 import ItemList from "../components/ItemList";
 import {
@@ -10,6 +10,8 @@ import {
 import { Item } from "../types/itemTypes";
 import Loader from "./Loader";
 import ErrorCard from "./ErrorCard";
+import Toast from "./Toast";
+import NavigationBar from "./NavBar";
 
 const Home = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -17,11 +19,29 @@ const Home = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [hasCreatedPost, setHasCreatedPost] = useState<boolean>(false);
+  const [addFlag, setAddFlag] = useState<boolean>(true);
+  const toastRef = useRef<{
+    showToast: (
+      type: "success" | "error",
+      message: string,
+      header: string
+    ) => void;
+  } | null>(null);
+
+  const formRef = useRef<HTMLDivElement | null>(null);
+
+  const triggerSuccessToast = (message: string, header: string) => {
+    toastRef.current?.showToast("success", message, header);
+  };
+
+  const triggerErrorToast = (message: string, header: string) => {
+    toastRef.current?.showToast("error", message, header);
+  };
 
   const sortedItems = [...items].sort((a, b) => {
-    if (sortOrder === "asc") return a.title.localeCompare(b.title);
-    return b.title.localeCompare(a.title);
+    return sortOrder === "asc"
+      ? a.title.localeCompare(b.title)
+      : b.title.localeCompare(a.title);
   });
 
   const toggleSortOrder = () => {
@@ -31,11 +51,11 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await fetchPosts().then((data) => {
-          setItems(data);
-        });
+        const data = await fetchPosts();
+        setItems(data);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        triggerErrorToast("Error fetching posts. Please try again.", "Error");
       } finally {
         setTimeout(() => {
           setLoading(false);
@@ -46,45 +66,81 @@ const Home = () => {
     fetchData();
   }, []);
 
-  const handleAdd = (title: string, body: string) => {
-    if (hasCreatedPost) {
-      setErrorMessage(
-        "You can only create one post! It's like having one slice of cake, no more for now."
-      );
+  const handleAdd = async (title: string, body: string) => {
+    try {
+      if (!addFlag) {
+        setErrorMessage(
+          "You can't add more than 1 post, as the mock API server keeps creating posts with the same ID."
+        );
+        return;
+      }
 
-      return;
-    }
-    createPost(title, body).then((newItem: Item) => {
+      const newItem: Item = await createPost(title, body);
       setItems([...items, newItem]);
-      setHasCreatedPost(true);
-      setErrorMessage("");
-    });
+      triggerSuccessToast("Task added successfully!", "Success");
+
+      if (newItem.id === 101) {
+        setAddFlag(false);
+      }
+    } catch (error) {
+      console.error("Error adding task:", error);
+      triggerErrorToast("Failed to add task. Please try again.", "Error");
+    }
   };
 
-  const handleEdit = (id: number, title: string, body: string) => {
+  const handleEdit = async (id: number, title: string, body: string) => {
     if (id === 101) {
       setErrorMessage(
-        "You can't edit a brand new item! It's still in its baby stage. Please try to edit other items."
+        "You can't edit a brand new post! The Mock API server restricts it. Please try to edit other items."
       );
-
       return;
     }
-    updatePost(id, title, body).then((updatedItem: Item) => {
+
+    try {
+      const updatedItem: Item = await updatePost(id, title, body);
       setItems(items.map((item) => (item.id === id ? updatedItem : item)));
       setEditingItem(null);
-      setErrorMessage("");
-    });
+      triggerSuccessToast("Task updated successfully!", "Success");
+    } catch (error) {
+      console.error("Error editing task:", error);
+      triggerErrorToast("Failed to update task. Please try again.", "Error");
+    }
   };
 
-  const handleDelete = (id: number) => {
-    deletePost(id).then(() => setItems(items.filter((item) => item.id !== id)));
+  const handleDelete = async (id: number) => {
+    try {
+      await deletePost(id);
+      setItems(items.filter((item) => item.id !== id));
+      triggerSuccessToast("Task deleted successfully!", "Success");
+
+      if (id === 101) {
+        setAddFlag(true);
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      triggerErrorToast("Failed to delete task. Please try again.", "Error");
+    }
   };
+
   const handleClose = () => {
     setErrorMessage("");
   };
+
+  const handleEditClick = (item: Item) => {
+    setEditingItem(item);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
+
   return (
-    <div className="relative">
-      <div className="container mx-auto p-4 transition-opacity relative z-50">
+    <div className="relative w-full overflow-hidden">
+      <div className="absolute left-0 w-full h-full wave-bg">
+        <span className="wave-span wave-1"></span>
+        <span className="wave-span wave-2"></span>
+        <span className="wave-span wave-3"></span>
+      </div>
+      <div className="container px-4 py-8 transition-opacity relative z-50">
         {loading ? (
           <Loader />
         ) : (
@@ -92,29 +148,39 @@ const Home = () => {
             {errorMessage && (
               <ErrorCard message={errorMessage} handleClose={handleClose} />
             )}
-            <h1 className="text-xl font-bold mb-4">Item List</h1>
-            <button
-              onClick={toggleSortOrder}
-              className="bg-gray-500 text-white px-4 py-2 mb-4"
-            >
-              Sort by Title ({sortOrder === "asc" ? "Ascending" : "Descending"})
-            </button>
 
-            <ItemForm
-              onAdd={handleAdd}
-              onEdit={handleEdit}
-              initialTitle={editingItem?.title || ""}
-              initialBody={editingItem?.body || ""}
-              editingId={editingItem?.id}
-            />
+            <NavigationBar />
+
+            <div ref={formRef}>
+              <ItemForm
+                onAdd={handleAdd}
+                onEdit={handleEdit}
+                initialTitle={editingItem?.title || ""}
+                initialBody={editingItem?.body || ""}
+                editingId={editingItem?.id}
+                setEditingItem={setEditingItem}
+              />
+            </div>
+
+            <div className="flex justify-center mb-4">
+              <button
+                onClick={toggleSortOrder}
+                className="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md "
+              >
+                Sort by Title (
+                {sortOrder === "asc" ? "Ascending" : "Descending"})
+              </button>
+            </div>
+
             <ItemList
               items={sortedItems}
               onDelete={handleDelete}
-              onEdit={(item) => setEditingItem(item)}
+              onEdit={handleEditClick}
             />
           </>
         )}
       </div>
+      <Toast ref={toastRef} />
     </div>
   );
 };
