@@ -8,9 +8,9 @@ import {
   updatePost,
 } from "../api/postServices";
 import { Item } from "../types/itemTypes";
-import Loader from "./Loader";
-import ErrorCard from "./ErrorCard";
-import Toast from "./Toast";
+import Loader from "../components/ui/Loader";
+import ErrorCard from "../components/ui/ErrorCard";
+import Toast from "../components/ui/Toast";
 import NavigationBar from "./NavBar";
 
 const Home = () => {
