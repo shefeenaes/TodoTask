@@ -86,36 +86,41 @@ const ItemForm: React.FC<Props> = ({
           <div className="flex gap-4 justify-center mt-4">
             {editingId ? (
               <>
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="text-white bg-blue-500 hover:bg-blue-400 py-2 px-6 rounded"
-                >
-                  Update Task
-                </button>
-                <button
-                  type="button"
-                  onClick={handleClear}
-                  className="text-white bg-gray-500 hover:bg-gray-400 py-2 px-6 rounded"
-                >
-                  Clear
-                </button>
+                <div className="relative flex justify-center items-center">
+                  <button
+                    className="flex flex-col justify-center items-center p-4 bg-indigo-100 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-indigo-300/50 relative"
+                    type="button"
+                    onClick={handleSubmit}
+                  >
+                    Update Task
+                  </button>
+                </div>
+                <div className="relative flex justify-center items-center">
+                  <button
+                    className="flex flex-col justify-center items-center p-4 bg-indigo-100 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-indigo-300/50 relative"
+                    type="button"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                </div>
               </>
             ) : (
               <>
-                <button
-                  type="submit"
-                  className="text-white bg-blue-500 hover:bg-blue-400 py-2 px-6 rounded"
-                >
-                  Add Task
-                </button>
-                <button
-                  type="reset"
-                  onClick={handleClear}
-                  className="text-white bg-gray-500 hover:bg-gray-400 py-2 px-6 rounded"
-                >
-                  Clear
-                </button>
+                <div className="relative flex justify-center items-center">
+                  <button className="flex flex-col justify-center items-center p-4 bg-indigo-100 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-indigo-300/50 relative">
+                    Add Task
+                  </button>
+                </div>
+                <div className="relative flex justify-center items-center">
+                  <button
+                    className="flex flex-col justify-center items-center p-4 bg-indigo-100 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-indigo-300/50 relative"
+                    type="reset"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                </div>
               </>
             )}
           </div>

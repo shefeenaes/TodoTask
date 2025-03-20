@@ -28,6 +28,8 @@ const Home = () => {
     ) => void;
   } | null>(null);
 
+  const formRef = useRef<HTMLDivElement | null>(null);
+
   const triggerSuccessToast = (message: string, header: string) => {
     toastRef.current?.showToast("success", message, header);
   };
@@ -124,6 +126,15 @@ const Home = () => {
     setErrorMessage("");
   };
 
+  const handleEditClick = (item: Item) => {
+    setEditingItem(item);
+
+    // Scroll to the form
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
+
   return (
     <div className="relative w-full overflow-hidden">
       {/* Background Waves */}
@@ -142,14 +153,18 @@ const Home = () => {
             )}
 
             <NavigationBar />
-            <ItemForm
-              onAdd={handleAdd}
-              onEdit={handleEdit}
-              initialTitle={editingItem?.title || ""}
-              initialBody={editingItem?.body || ""}
-              editingId={editingItem?.id}
-              setEditingItem={setEditingItem}
-            />
+
+            {/* Task Form */}
+            <div ref={formRef}>
+              <ItemForm
+                onAdd={handleAdd}
+                onEdit={handleEdit}
+                initialTitle={editingItem?.title || ""}
+                initialBody={editingItem?.body || ""}
+                editingId={editingItem?.id}
+                setEditingItem={setEditingItem}
+              />
+            </div>
 
             {/* Center the Sort button */}
             <div className="flex justify-center mb-4">
@@ -165,7 +180,7 @@ const Home = () => {
             <ItemList
               items={sortedItems}
               onDelete={handleDelete}
-              onEdit={(item) => setEditingItem(item)}
+              onEdit={handleEditClick} // Updated to use handleEditClick
             />
           </>
         )}
